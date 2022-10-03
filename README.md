@@ -47,5 +47,4 @@ These are our communication channels, so feel free to contact us:
 
 -   [Discord](https://discord.com/invite/cUc8VRGmPs) `#developers` channel
 -   [@CyberConnectHQ](https://twitter.com/CyberConnectHQ) on Twitter
--   [Github](https://github.com/cyberconnecthq/
-    build-nft-sbt-guide/issues) for issues
+-   [Github](https://github.com/cyberconnecthq/build-nft-sbt-guide/issues) for issues
