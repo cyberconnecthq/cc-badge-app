@@ -10,7 +10,7 @@ The repo contains the full code for the How to Build NFT/SBT platform guide from
 
 The project was built to help developer with the basic functionalities necessary to develop an NFT/SBT issuing platform by taking advantage of the full power of CyberConnect APIs.
 
-This examples covers all the steps described in the docs:
+This example covers all the steps described in the docs:
 
 1. [Authentication](https://docs.cyberconnect.me/how-to/build-a-nft-sbt-platform/authentication)
 2. [Create Profile NFT](https://docs.cyberconnect.me/how-to/build-a-nft-sbt-platform/create-profile-nft)
