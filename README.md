@@ -1,46 +1,51 @@
-# Getting Started with Create React App
+# Build NFT/SBT platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Introduction
 
-## Available Scripts
+**CyberConnect Protocol** is a decentralized social graph protocol that helps Web3 applications bootstrap network effects. It empowers users to truly own their social identities, contents, and connections in a social network and provides developers with a rich set of tools to build applications with meaningful social experiences.
 
-In the project directory, you can run:
+## Project
 
-### `npm start`
+The repo contains the full code for the How to Build NFT/SBT platform guide from the [CyberConnect Developer Center](https://docs.cyberconnect.me/).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The project was built to help developer with the basic functionalities necessary to develop an NFT/SBT issuing platform by taking advantage of the full power of CyberConnect APIs.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+This examples covers all the steps described in the docs:
 
-### `npm test`
+1. [Authentication](https://docs.cyberconnect.me/how-to/build-a-nft-sbt-platform/authentication)
+2. [Create Profile NFT](https://docs.cyberconnect.me/how-to/build-a-nft-sbt-platform/create-profile-nft)
+3. [Create Essence NFT](https://docs.cyberconnect.me/how-to/build-a-nft-sbt-platform/create-essence-nft)
+4. [Collect Essence NFT](https://docs.cyberconnect.me/how-to/build-a-nft-sbt-platform/collect-essence-nft)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation
 
-### `npm run build`
+```
+$ npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+or
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+$ yarn install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This command will install all the packages that are necessary to start the development server.
 
-### `npm run eject`
+## Local Development
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+then run the app in the development mode by running the command:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+`npm start`
+or
+`yarn start`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+This command starts a local development server and opens up a browser window [http://localhost:3000](http://localhost:3000). Most changes are reflected live without having to restart the server.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Contact
 
-## Learn More
+These are our communication channels, so feel free to contact us:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+-   [Discord](https://discord.com/invite/cUc8VRGmPs) `#developers` channel
+-   [@CyberConnectHQ](https://twitter.com/CyberConnectHQ) on Twitter
+-   [Github](https://github.com/cyberconnecthq/
+    build-nft-sbt-guide/issues) for issues
