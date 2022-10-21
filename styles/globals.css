@@ -1,0 +1,242 @@
+:root {
+  --black: rgba(17, 17, 17, 1);
+  --white: #FFFEFC;
+  --gray: rgba(17, 17, 17, 0.1);
+  --dark-gray: #00000099;
+  --orange: #EB5757;
+  --green: #65c819;
+  --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  background-color: var(--white);
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-family);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+hr {
+  border-bottom: 1px solid var(--gray);
+  margin: 20px auto;
+}
+
+h1,
+h2 {
+  margin: 0;
+  padding: 0;
+}
+
+svg {
+  display: block;
+  font-size: 30px;
+  margin: 0 auto;
+  height: 100%;
+}
+
+/* GLOBAL */
+.container {
+  max-width: 1398px;
+  margin: 0 auto;
+  height: 100%;
+  position: relative;
+}
+
+.wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column-reverse;
+  padding: 0px 20px 0px 100px;
+  min-height: 100vh;
+}
+
+.wrapper-content {
+  padding-top: 20px;
+}
+
+.wrapper-details {
+  width: 100%;
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* NAVBAR */
+.navbar {
+  background-color: var(--white);
+  border-right: 1px solid var(--gray);
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80px;
+  height: 100vh;
+  padding: 20px 0px;
+  top: 0;
+  z-index: 1;
+  position: fixed;
+}
+
+.navbar-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c4c4c4;
+  cursor: pointer;
+  width: 100%;
+  height: 60px;
+  text-align: center;
+}
+
+.navbar-link.active {
+  color: #000000;
+}
+
+.navbar-address {
+  border-radius: 50%;
+  min-width: 60px;
+  min-height: 60px;
+  margin: 0 auto;
+}
+
+.navbar-address div {
+  background-color: black;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  width: 100%;
+  height: 100%;
+}
+
+/* BUTTONS */
+.create-btn,
+.signin-btn,
+.create-event-btn,
+.collect-btn {
+  background: #fdf5f2;
+  border: 1px solid rgba(235, 87, 87, 0.3);
+  box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);
+  border-radius: 50px;
+  color: var(--orange);
+  cursor: pointer;
+  font-size: 18px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+}
+
+.create-event-btn {
+  width: 60px;
+  height: 60px;
+}
+
+.create-event-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.connect-btn,
+.signup-btn {
+  background: var(--orange);
+  border: 1px solid rgba(235, 87, 87, 0.3);
+  box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);
+  border-radius: 50px;
+  color: var(--white);
+  cursor: pointer;
+  font-size: 18px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+}
+
+/* CARDS */
+.event-card {
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+  padding: 0px 30px 30px 30px;
+  position: relative;
+}
+
+.event-card-img {
+  box-shadow: rgb(88 102 126 / 8%) 0px 4px 24px, rgb(88 102 126 / 12%) 0px 1px 2px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 20px;
+}
+
+.event-card .collect-btn {
+  font-size: 14px;
+  width: 80px;
+  padding: 8px 10px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.event-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 10px auto;
+}
+
+.event-card-detail {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.event-card-detail svg {
+  width: 16px;
+  height: 16px;
+}
+
+.event-card-detail div:last-child {
+  margin-left: 10px;
+  text-transform: capitalize;
+}
+
+.events {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-gap: 30px;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (min-width: 600px) {
+  .wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .wrapper-content {
+    width: 100%;
+    padding-right: 20px;
+  }
+
+  .wrapper-details {
+    border-left: 1px solid var(--gray);
+    display: block;
+    padding: 20px;
+    max-width: 260px;
+    margin: 0px;
+    min-height: 100vh;
+  }
+}

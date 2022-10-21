@@ -1,4 +1,4 @@
-# Build NFT/SBT platform
+# CyberConnect Event app
 
 ## Introduction
 
@@ -6,40 +6,28 @@
 
 ## Project
 
-The repo contains the full code for the How to Build NFT/SBT platform guide from the [CyberConnect Developer Center](https://docs.cyberconnect.me/).
+The repo contains the full code for the **How to Build Event app** guide from the [CyberConnect Developer Center](https://docs.cyberconnect.me/).
 
-The project was built to help developer with the basic functionalities necessary to develop an NFT/SBT issuing platform by taking advantage of the full power of CyberConnect APIs.
+The project was built to help developer with the basic functionalities necessary to develop a content application by taking advantage of the full power of CyberConnect APIs.
 
-This example covers all the steps described in the docs:
+This example contains all the steps described in the docs:
 
-1. [Authentication](https://docs.cyberconnect.me/how-to/build-a-nft-sbt-platform/authentication)
-2. [Create Profile NFT](https://docs.cyberconnect.me/how-to/build-a-nft-sbt-platform/create-profile-nft)
-3. [Create Essence NFT](https://docs.cyberconnect.me/how-to/build-a-nft-sbt-platform/create-essence-nft)
-4. [Collect Essence NFT](https://docs.cyberconnect.me/how-to/build-a-nft-sbt-platform/collect-essence-nft)
+1. [Create a Profile](https://docs.cyberconnect.me/how-to/build-event-app/create-a-profile)
+2. [Authentication](https://docs.cyberconnect.me/how-to/build-event-app/authentication)
+3. [Create an Event](https://docs.cyberconnect.me/how-to/build-event-app/create-an-event)
+4. [Collect an Event](https://docs.cyberconnect.me/how-to/build-event-app/collect-an-event)
+
+## Prerequisites
+
+Make sure that you have installed [Node.js](https://nodejs.org/en/download/) on your computer and [MetaMask](https://metamask.io/) extension in your Chrome browser.
 
 ## Installation
 
-```
-$ npm install
-```
-
-or
-
-```
-$ yarn install
-```
-
-This command will install all the packages that are necessary to start the development server.
+Clone the repo [https://github.com/cyberconnecthq/cc-event-app.git](https://github.com/cyberconnecthq/cc-event-app.git) and run the following command in your terminal to install all the packages that are necessary to start the development server: `npm install` or `yarn install`.
 
 ## Local Development
 
-then run the app in the development mode by running the command:
-
-`npm start`
-or
-`yarn start`
-
-This command starts a local development server and opens up a browser window [http://localhost:3000](http://localhost:3000). Most changes are reflected live without having to restart the server.
+To start the local development server run the following command and open up the browser window http://localhost:3000. Most changes are reflected live without having to restart the server: `npm run dev` or `yarn dev`.
 
 ## Contact
 

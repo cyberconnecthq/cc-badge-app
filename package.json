@@ -1,51 +1,34 @@
 {
-    "name": "build-nft-sbt-guide",
+    "name": "cc-content-app",
     "version": "0.1.0",
     "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
     "dependencies": {
         "@apollo/client": "^3.7.0",
         "@ethersproject/providers": "^5.7.1",
-        "@metamask/detect-provider": "^1.2.0",
-        "@testing-library/jest-dom": "^5.16.5",
-        "@testing-library/react": "^13.4.0",
-        "@testing-library/user-event": "^13.5.0",
-        "@types/jest": "^27.5.2",
-        "@types/node": "^16.11.63",
-        "@types/react": "^18.0.21",
-        "@types/react-dom": "^18.0.6",
+        "@metamask/detect-provider": "^2.0.0",
+        "@ngneat/falso": "^6.1.0",
+        "@types/uuid": "^8.3.4",
+        "axios": "^1.1.2",
         "ethers": "^5.7.1",
         "graphql": "^16.6.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "react-scripts": "5.0.1",
-        "typescript": "^4.8.4",
-        "web-vitals": "^2.1.4"
-    },
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
+        "next": "12.3.1",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "react-icons": "^4.4.0",
+        "uuid": "^9.0.0"
     },
     "devDependencies": {
-        "@metamask/types": "^1.1.0"
+        "@types/node": "18.8.5",
+        "@types/react": "18.0.21",
+        "@types/react-dom": "18.0.6",
+        "eslint": "8.25.0",
+        "eslint-config-next": "12.3.1",
+        "typescript": "4.8.4"
     }
 }
