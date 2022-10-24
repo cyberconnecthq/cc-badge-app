@@ -99,7 +99,7 @@ function BadgeBtn() {
                         /* The profile id under which the Essence is registered */
                         profileID: profileID,
                         /* Name of the Essence */
-                        name: "Badge",
+                        name: "Event SBT",
                         /* Symbol of the Essence */
                         symbol: "SBT",
                         /* URL for the json object containing data about content and the Essence NFT */
