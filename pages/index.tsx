@@ -1,11 +1,11 @@
 import type { NextPage } from "next";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
-import { EventCard } from "../components/Cards/EventCard";
-import { IEventCard } from "../types";
+import { BadgeCard } from "../components/Cards/BadgeCard";
+import { IBadgeCard } from "../types";
 
 const Home: NextPage = () => {
-  const events = [
+  const badges = [
     {
       handle: "ccprotocol",
       name: "CyberConnect",
@@ -48,13 +48,13 @@ const Home: NextPage = () => {
       <Navbar />
       <div className="wrapper">
         <div className="wrapper-content">
-          <h1>Events</h1>
+          <h1>Badges</h1>
           <hr></hr>
-          <div className="events">
+          <div className="badges">
             {
-              events.length > 0 &&
-              events.map((post: IEventCard, index: number) => (
-                <EventCard
+              badges.length > 0 &&
+              badges.map((post: IBadgeCard, index: number) => (
+                <BadgeCard
                   key={index}
                   essenceID={post.essenceID}
                   profileID={post.profileID}

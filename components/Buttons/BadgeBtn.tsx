@@ -5,9 +5,9 @@ import { CREATE_REGISTER_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
 import { IEssenceMetadata, Version } from "../../types";
 import { AuthContext } from "../../context/auth";
 import { v4 as uuidv4 } from "uuid";
-import { BsCalendar2Event } from "react-icons/bs";
+import { IoMdRibbon } from "react-icons/io";
 
-function CreateEventBtn() {
+function BadgeBtn() {
     const { provider, address, accessToken, profileID, handle, checkNetwork } = useContext(AuthContext);
     const [createRegisterEssenceTypedData] = useMutation(CREATE_REGISTER_ESSENCE_TYPED_DATA);
     const [relay] = useMutation(RELAY);
@@ -99,7 +99,7 @@ function CreateEventBtn() {
                         /* The profile id under which the Essence is registered */
                         profileID: profileID,
                         /* Name of the Essence */
-                        name: "Event SBT",
+                        name: "Badge",
                         /* Symbol of the Essence */
                         symbol: "SBT",
                         /* URL for the json object containing data about content and the Essence NFT */
@@ -141,7 +141,7 @@ function CreateEventBtn() {
             console.log(txHash);
 
             /* Display success message */
-            alert("Successfully created the event!");
+            alert("Successfully created the badge!");
         } catch (error) {
             /* Display error message */
             alert(error.message);
@@ -150,13 +150,13 @@ function CreateEventBtn() {
 
     return (
         <button
-            className="create-event-btn"
+            className="badge-btn center"
             type="submit"
             onClick={handleOnClick}
         >
-            <BsCalendar2Event />
+            <IoMdRibbon />
         </button>
     );
 }
 
-export default CreateEventBtn;
+export default BadgeBtn;

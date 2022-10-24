@@ -123,7 +123,7 @@ svg {
 /* BUTTONS */
 .create-btn,
 .signin-btn,
-.create-event-btn,
+.badge-btn,
 .collect-btn {
   background: #fdf5f2;
   border: 1px solid rgba(235, 87, 87, 0.3);
@@ -137,14 +137,9 @@ svg {
   padding: 10px 16px;
 }
 
-.create-event-btn {
+.badge-btn {
   width: 60px;
   height: 60px;
-}
-
-.create-event-btn svg {
-  width: 24px;
-  height: 24px;
 }
 
 .connect-btn,
@@ -162,21 +157,21 @@ svg {
 }
 
 /* CARDS */
-.event-card {
+.badge-card {
   border: 1px solid var(--gray);
   border-radius: 8px;
   padding: 0px 30px 30px 30px;
   position: relative;
 }
 
-.event-card-img {
+.badge-card-img {
   box-shadow: rgb(88 102 126 / 8%) 0px 4px 24px, rgb(88 102 126 / 12%) 0px 1px 2px;
   border-radius: 50%;
   overflow: hidden;
   margin: 20px;
 }
 
-.event-card .collect-btn {
+.badge-card .collect-btn {
   font-size: 14px;
   width: 80px;
   padding: 8px 10px;
@@ -185,30 +180,30 @@ svg {
   right: 20px;
 }
 
-.event-card-title {
+.badge-card-title {
   font-size: 20px;
   font-weight: 600;
   margin: 10px auto;
 }
 
-.event-card-detail {
+.badge-card-detail {
   font-size: 14px;
   display: flex;
   align-items: center;
   margin-top: 6px;
 }
 
-.event-card-detail svg {
+.badge-card-detail svg {
   width: 16px;
   height: 16px;
 }
 
-.event-card-detail div:last-child {
+.badge-card-detail div:last-child {
   margin-left: 10px;
   text-transform: capitalize;
 }
 
-.events {
+.badges {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   grid-gap: 30px;

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { MdOutlineDashboard } from "react-icons/md";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../context/auth";
-import CreateEventBtn from "../Buttons/CreateEventBtn";
+import BadgeBtn from "../Buttons/BadgeBtn";
 
 const Navbar = () => {
     const { address } = useContext(AuthContext);
@@ -17,7 +17,7 @@ const Navbar = () => {
                     <div className={`navbar-link ${router.pathname === "/" && "active"}`}>{<MdOutlineDashboard />}</div>
                 </Link>
                 <hr></hr>
-                <CreateEventBtn />
+                <BadgeBtn />
             </div>
             <div className="navbar-address">
                 {

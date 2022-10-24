@@ -77,7 +77,7 @@ function CollectBtn({ profileID, essenceID }: { profileID: number, essenceID: nu
             console.log(txHash);
 
             /* Display success message */
-            alert(`Successfully collected the Event SBT!`);
+            alert(`Successfully collected the badge SBT!`);
         } catch (error) {
             /* Display error message */
             alert(error.message);

@@ -100,7 +100,7 @@ export interface IEssenceMetadata {
     external_url?: string;
 }
 
-export interface IEventCard {
+export interface IBadgeCard {
     essenceID: number;
     profileID: number;
     tokenURI: string;
