@@ -23,10 +23,6 @@ export interface IProfileMetadata {
 }
 
 /* Metadata schema for Essence NFT */
-export enum Version {
-    V1 = "1.0.0",
-}
-
 interface Media {
     /* The MIME type for the media */
     media_type: string;
@@ -54,7 +50,7 @@ export interface IEssenceMetadata {
     metadata_id: string;
 
     /* Version of the metadata schema used for the issued item. */
-    version: Version;
+    version: string;
 
     /* ~~ OPTIONAL ~~ */
     /* Id of the application under which the items are being minted. */

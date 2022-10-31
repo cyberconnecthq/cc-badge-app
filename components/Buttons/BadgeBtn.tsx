@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { pinJSONToIPFS, getEssenceSVGData } from "../../helpers/functions";
 import { CREATE_REGISTER_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
-import { IEssenceMetadata, Version } from "../../types";
+import { IEssenceMetadata } from "../../types";
 import { AuthContext } from "../../context/auth";
 import { v4 as uuidv4 } from "uuid";
 import { IoMdRibbon } from "react-icons/io";
@@ -44,7 +44,7 @@ function BadgeBtn() {
             /* Construct the metadata object for the Essence NFT */
             const metadata: IEssenceMetadata = {
                 metadata_id: uuidv4(),
-                version: Version.V1,
+                version: "1.0.0",
                 app_id: "cyberconnect",
                 lang: "en",
                 issue_date: new Date().toISOString(),
