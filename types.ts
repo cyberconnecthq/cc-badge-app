@@ -143,5 +143,5 @@ export interface IBadgeInput {
     nftImageURL: string;
     title: string;
     venue: string;
-    date: string;
+    date: number;
 }

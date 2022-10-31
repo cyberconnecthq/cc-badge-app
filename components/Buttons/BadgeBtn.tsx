@@ -133,7 +133,7 @@ function BadgeBtn({ nftImageURL, title, venue, date }: IBadgeInput) {
             });
             const txHash = relayResult.data?.relay?.relayTransaction?.txHash;
 
-            /* Close Post Modal */
+            /* Close Badge Modal */
             handleModal(null, "");
 
             /* Set the isCreatingBadge in the state variables */
@@ -144,7 +144,7 @@ function BadgeBtn({ nftImageURL, title, venue, date }: IBadgeInput) {
             console.log(txHash);
 
             /* Display success message */
-            handleModal("success", "Post was created!");
+            handleModal("success", "Badge was created!");
         } catch (error) {
             /* Set the isCreatingBadge in the state variables */
             setIsCreatingBadge(false);

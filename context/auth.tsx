@@ -57,7 +57,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     /* State variable to store the initial number of badges */
     const [badgeCount, setBadgeCount] = useState<number>(0);
 
-    /* State variable to store the tokenURI for post created */
+    /* State variable to store the tokenURI for profile created */
     const [isCreatingProfile, setIsCreatingProfile] = useState<boolean>(false);
 
     /* State variable to store the tokenURI for badges created */
@@ -102,8 +102,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 const primaryProfile = res?.data?.address?.wallet?.primaryProfile;
 
                 /* Get the badges */
-                const edgesPosts = primaryProfile?.essences?.edges;
-                const badges = edgesPosts?.map((edge: any) => edge?.node) || [];
+                const edgesBadges = primaryProfile?.essences?.edges;
+                const badges = edgesBadges?.map((edge: any) => edge?.node) || [];
 
                 /* Get the profiles */
                 const edgesProfiles = res?.data?.address?.wallet?.profiles?.edges;
@@ -136,23 +136,22 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                     setProfileCount(profileCount);
                 } else {
                     /* Get the updated count of essences */
-                    const updatedPostCount = primaryProfile?.essences?.totalCount;
+                    const updatedBadgeCount = primaryProfile?.essences?.totalCount;
 
                     /* Get the updated count of profiles */
                     const updatedProfileCount = profiles.length;
 
-                    if (badgeCount !== updatedPostCount) {
-                        const latestBadge = primaryProfile?.essences?.edges[updatedPostCount - 1]?.node;
+                    if (badgeCount !== updatedBadgeCount) {
+                        const latestBadge = primaryProfile?.essences?.edges[updatedBadgeCount - 1]?.node;
 
                         /* Reset the isCreatingBadge in the state variable */
                         setIsCreatingBadge(false);
 
                         /* Set the badges in the state variable */
                         setBadges([...badges, latestBadge]);
-                        console.log("New badge created");
-                        console.log(latestBadge);
-                        /* Set the post count in the state variable */
-                        setBadgeCount(updatedPostCount);
+
+                        /* Set the badge count in the state variable */
+                        setBadgeCount(updatedBadgeCount);
                     } else if (profileCount !== updatedProfileCount) {
                         const latestProfile = profiles[updatedProfileCount - 1];
 

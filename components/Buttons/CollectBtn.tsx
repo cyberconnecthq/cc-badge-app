@@ -79,7 +79,7 @@ function CollectBtn({ profileID, essenceID }: { profileID: number, essenceID: nu
             console.log(txHash);
 
             /* Display success message */
-            handleModal("success", "Post was collected!");
+            handleModal("success", "Badge was collected!");
         } catch (error) {
             /* Display error message */
             const message = error.message as string;

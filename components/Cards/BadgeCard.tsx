@@ -28,7 +28,6 @@ export const BadgeCard = ({ essenceID, tokenURI, createdBy }: IBadgeCard) => {
                 const res = await fetch(parseURL(tokenURI));
                 if (res.status === 200) {
                     const data = await res.json();
-                    console.log(data)
                     setData(data);
                 }
             } catch (error) {
@@ -73,7 +72,7 @@ export const BadgeCard = ({ essenceID, tokenURI, createdBy }: IBadgeCard) => {
                         </div>
                         <div className="badge-card-detail">
                             <div><BsCalendar2Event /></div>
-                            <div>{data.attributes[1]["value"] && new Date(data.attributes[1]["value"]).toLocaleDateString()}</div>
+                            <div>{data.attributes[1]["value"] && new Date(Number(data.attributes[1]["value"])).toLocaleDateString()}</div>
                         </div>
                     </div>
                     <CollectBtn

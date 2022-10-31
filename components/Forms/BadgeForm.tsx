@@ -7,7 +7,7 @@ const BadgeForm = () => {
         nftImageURL: "",
         title: "",
         venue: "twitter",
-        date: String(Date.now()),
+        date: Number(Date.now()),
     });
 
     const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
