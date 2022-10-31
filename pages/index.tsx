@@ -81,7 +81,7 @@ const Home: NextPage = () => {
                         ))
                     }
                     {
-                      !isCreatingBadge &&
+                      isCreatingBadge &&
                       <BadgePlaceholder />
                     }
                   </div>)

@@ -274,7 +274,8 @@ svg {
   border: 1px solid var(--gray);
   border-radius: 8px;
   max-width: 270px;
-  height: 344px;
+  min-height: 344px;
+  max-height: 370px;
   padding: 0px 30px 30px 30px;
 }
 
