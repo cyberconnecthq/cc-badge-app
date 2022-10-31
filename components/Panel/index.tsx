@@ -1,21 +1,25 @@
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 import SigninBtn from "../../components/Buttons/SigninBtn";
 import ConnectBtn from "../../components/Buttons/ConnectBtn";
-import SignupBtn from "../../components/Buttons/SignupBtn";
 
 const Panel = () => {
-    const { provider, address, accessToken, profileID } = useContext(AuthContext);
+    const { provider, address, accessToken } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
+
     return (
         <div className="panel">
             {
                 (provider && address) ?
                     <div>
                         {!accessToken && <SigninBtn />}
-                        {!profileID && <SignupBtn />}
+                        <button
+                            className="signup-btn"
+                            onClick={() => handleModal("signup", "")}
+                        >Sign up</button>
                     </div>
                     : <ConnectBtn />
-
             }
         </div>
     );

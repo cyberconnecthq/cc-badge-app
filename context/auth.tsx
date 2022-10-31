@@ -2,20 +2,33 @@ import { ReactNode, createContext, useState, useEffect } from "react";
 import { Web3Provider } from "@ethersproject/providers";
 import { CHAIN_ID } from "../helpers/constants";
 import { IAuthContext } from "../types";;
-import { useQuery } from "@apollo/client";
-import { USER_INFO_BY_ADDRESS } from "../graphql";
+import { ADDRESS } from "../graphql";
+import { useCancellableQuery } from "../hooks/useCancellableQuery";
+import { timeout } from "../helpers/functions";
 
 export const AuthContext = createContext<IAuthContext>({
     provider: undefined,
     address: undefined,
     accessToken: undefined,
-    profileID: undefined,
-    handle: undefined,
+    primayProfileID: undefined,
+    primaryHandle: undefined,
+    isCreatingProfile: false,
+    isCreatingBadge: false,
+    profileCount: 0,
+    badgeCount: 0,
+    badges: [],
+    profiles: [],
     setProvider: () => { },
     setAddress: () => { },
     setAccessToken: () => { },
-    setProfileID: () => { },
-    setHandle: () => { },
+    setPrimayProfileID: () => { },
+    setPrimaryHandle: () => { },
+    setIsCreatingProfile: () => { },
+    setIsCreatingBadge: () => { },
+    setProfileCount: () => { },
+    setBadgeCount: () => { },
+    setBadges: () => { },
+    setProfiles: () => { },
     checkNetwork: async () => new Promise(() => { }),
 });
 AuthContext.displayName = "AuthContext";
@@ -30,18 +43,31 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const [address, setAddress] = useState<string | undefined>(undefined);
 
     /* State variable to store the profile ID */
-    const [profileID, setProfileID] = useState<number | undefined>(undefined);
+    const [primayProfileID, setPrimayProfileID] = useState<number | undefined>(undefined);
 
     /* State variable to store the handle */
-    const [handle, setHandle] = useState<string | undefined>(undefined);
+    const [primaryHandle, setPrimaryHandle] = useState<string | undefined>(undefined);
 
     /* State variable to store the access token */
     const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
 
-    /* Query to get user information by wallet address */
-    const { data } = useQuery(USER_INFO_BY_ADDRESS, {
-        variables: { address },
-    });
+    /* State variable to store the initial number of accounts */
+    const [profileCount, setProfileCount] = useState<number>(0);
+
+    /* State variable to store the initial number of badges */
+    const [badgeCount, setBadgeCount] = useState<number>(0);
+
+    /* State variable to store the tokenURI for post created */
+    const [isCreatingProfile, setIsCreatingProfile] = useState<boolean>(false);
+
+    /* State variable to store the tokenURI for badges created */
+    const [isCreatingBadge, setIsCreatingBadge] = useState<boolean>(false);
+
+    /* State variable to store the badges */
+    const [badges, setBadges] = useState<any[]>([]);
+
+    /* State variable to store the profiles */
+    const [profiles, setProfiles] = useState<any[]>([]);
 
     useEffect(() => {
         /* Check if the user connected with wallet */
@@ -57,21 +83,126 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     }, [provider, address]);
 
     useEffect(() => {
-        if (!data) return;
+        if (!(address && accessToken)) return;
 
-        /* Get all profile for the wallet address */
-        const edges = data?.address?.goerliWallet?.profiles?.edges;
-        const accounts = edges?.map((edge: any) => edge?.node);
+        let query: any;
+        let counter: number = 0;
 
-        /* Get the primary profile */
-        const primaryAccount = accounts?.find((account: any) => account?.isPrimary);
+        const fetchData = async () => {
+            try {
+                query = useCancellableQuery({
+                    query: ADDRESS,
+                    variables: {
+                        address: address,
+                        chainID: CHAIN_ID
+                    },
+                });
+                const res = await query;
+                /* Get the primary profile */
+                const primaryProfile = res?.data?.address?.wallet?.primaryProfile;
 
-        /* Set the profile ID */
-        setProfileID(primaryAccount?.profileID);
+                /* Get the badges */
+                const edgesPosts = primaryProfile?.essences?.edges;
+                const badges = edgesPosts?.map((edge: any) => edge?.node) || [];
 
-        /* Set the handle */
-        setHandle(primaryAccount?.handle);
-    }, [data]);
+                /* Get the profiles */
+                const edgesProfiles = res?.data?.address?.wallet?.profiles?.edges;
+                const profiles = edgesProfiles?.map((edge: any) => edge?.node) || [];
+
+                if (!isCreatingProfile && !isCreatingBadge) {
+                    /* Get the total count of essences */
+                    const badgeCount = primaryProfile?.essences?.totalCount;
+
+                    /* Get the total count of profiles */
+                    const profileCount = profiles.length;
+
+                    /* Set the profile ID variable*/
+                    setPrimayProfileID(primaryProfile?.profileID);
+
+                    /* Set the primaryHandle variable */
+                    setPrimaryHandle(primaryProfile?.handle);
+
+                    /* Set the badges */
+                    setBadges(badges);
+
+                    /* Set the profiles */
+                    setProfiles(profiles);
+
+
+                    /* Set the initial number of badges */
+                    setBadgeCount(badgeCount);
+
+                    /* Set the initial number of accounts */
+                    setProfileCount(profileCount);
+                } else {
+                    /* Get the updated count of essences */
+                    const updatedPostCount = primaryProfile?.essences?.totalCount;
+
+                    /* Get the updated count of profiles */
+                    const updatedProfileCount = profiles.length;
+
+                    if (badgeCount !== updatedPostCount) {
+                        const latestBadge = primaryProfile?.essences?.edges[updatedPostCount - 1]?.node;
+
+                        /* Reset the isCreatingBadge in the state variable */
+                        setIsCreatingBadge(false);
+
+                        /* Set the badges in the state variable */
+                        setBadges([...badges, latestBadge]);
+                        console.log("New badge created");
+                        console.log(latestBadge);
+                        /* Set the post count in the state variable */
+                        setBadgeCount(updatedPostCount);
+                    } else if (profileCount !== updatedProfileCount) {
+                        const latestProfile = profiles[updatedProfileCount - 1];
+
+                        /* Reset the isCreatingProfile in the state variable */
+                        setIsCreatingProfile(false);
+
+                        /* Set the profiles in the state variable */
+                        setProfiles([...profiles, latestProfile]);
+
+                        /* Set the profiles count in the state variable */
+                        setProfileCount(updatedProfileCount);
+                    } else {
+                        /* Data hasn't been indexed try to fetch again every 2s */
+                        if (counter < 150) {
+                            /* Wait 2s before fetching data again */
+                            counter++;
+                            console.log("Fetching data again.");
+                            await timeout(2000);
+                            fetchData();
+                        } else {
+                            /* Cancel the query */
+                            query.cancel();
+                            console.log("Fetching data cancelled.");
+
+                            /* Reset the isCreatingBadge in the state variable */
+                            setIsCreatingBadge(false);
+
+                            /* Reset the isCreatingProfile in the state variable */
+                            setIsCreatingProfile(false);
+                        }
+                    }
+                }
+            } catch (error) {
+                /* Reset the isCreatingBadge in the state variable */
+                setIsCreatingBadge(false);
+
+                /* Reset the isCreatingProfile in the state variable */
+                setIsCreatingProfile(false);
+
+                console.error(error);
+            }
+        }
+        fetchData();
+
+        return () => {
+            if (query) {
+                query.cancel();
+            }
+        }
+    }, [address, accessToken, badgeCount, profileCount, isCreatingBadge, isCreatingProfile,]);
 
     /* Function to check if the network is the correct one */
     const checkNetwork = async (provider: Web3Provider) => {
@@ -107,13 +238,25 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 provider,
                 address,
                 accessToken,
-                profileID,
-                handle,
+                primayProfileID,
+                primaryHandle,
+                profileCount,
+                badgeCount,
+                badges,
+                profiles,
+                isCreatingProfile,
+                isCreatingBadge,
                 setProvider,
                 setAddress,
                 setAccessToken,
-                setProfileID,
-                setHandle,
+                setPrimayProfileID,
+                setPrimaryHandle,
+                setProfileCount,
+                setBadgeCount,
+                setIsCreatingProfile,
+                setIsCreatingBadge,
+                setBadges,
+                setProfiles,
                 checkNetwork,
             }}>
             {children}

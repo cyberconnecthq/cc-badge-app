@@ -4,33 +4,29 @@ import ProfileNFTABI from "../../abi/ProfileNFT.json";
 import { PROFILE_NFT_CONTRACT, PROFILE_NFT_OPERATOR } from "../../helpers/constants";
 import { pinJSONToIPFS } from "../../helpers/functions";
 import { randUserName, randAvatar, randPhrase, randFullName, } from "@ngneat/falso";
-import { IProfileMetadata } from "../../types";
+import { IProfileMetadata, ISignupInput } from "../../types";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 
-function SignupBtn() {
-    const { provider, address, setProfileID, setHandle, checkNetwork } = useContext(AuthContext);
+function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
+    const { provider, address, primayProfileID, setPrimayProfileID, primaryHandle, setPrimaryHandle, setIsCreatingProfile, checkNetwork } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
 
     const handleOnClick = async () => {
         try {
             /* Check if the user connected with wallet */
             if (!(provider && address)) {
-                throw Error("Connect with MetaMask.");
+                throw Error("You need to Connect wallet.");
             }
 
             /* Check if the network is the correct one */
             await checkNetwork(provider);
 
-            /* Collect user input */
-            const handle = prompt("Handle:") || randUserName();
-            const avatar = prompt("Avatar URL:") || randAvatar({ size: 200 });
-            const name = prompt("Name:") || randFullName();
-            const bio = prompt("Bio:") || randPhrase();
-
             /* Construct metadata schema */
             const metadata: IProfileMetadata = {
-                name: name,
-                bio: bio,
-                handle: handle,
+                name: name || randFullName(),
+                bio: bio || randPhrase(),
+                handle: handle || randUserName(),
                 version: "1.0.0",
             };
 
@@ -52,16 +48,22 @@ function SignupBtn() {
                 /* CreateProfileParams */
                 {
                     to: address,
-                    handle: handle,
-                    avatar: avatar,
+                    handle: handle || randUserName(),
+                    avatar: avatar || randAvatar({ size: 200 }),
                     metadata: ipfsHash,
                     operator: PROFILE_NFT_OPERATOR,
                 },
                 /* preData */
                 0x0,
                 /* postData */
-                0x0
+                0x0,
             );
+
+            /* Close Signup Modal */
+            handleModal(null, "");
+
+            /* Set the isCreatingProfile in the state variables */
+            setIsCreatingProfile(true);
 
             /* Wait for the transaction to be mined */
             await tx.wait();
@@ -71,19 +73,23 @@ function SignupBtn() {
             console.log(tx.hash);
 
             /* Call the getProfileIdByHandle function to get the profile id */
-            const profileID = await contract.getProfileIdByHandle(handle);
+            const newProfileID = await contract.getProfileIdByHandle(handle);
 
-            /* Set the profileID in the state variables */
-            setProfileID(Number(profileID));
+            /* Set the primary profileID in the state variables */
+            setPrimayProfileID(primayProfileID || Number(newProfileID));
 
-            /* Set the handle in the state variables */
-            setHandle(handle);
+            /* Set the primary handle in the state variables */
+            setPrimaryHandle(primaryHandle || handle);
 
             /* Display success message */
-            alert("Successfully created the profile!");
+            handleModal("success", "Profile was created!");
         } catch (error) {
+            /* Set the isCreatingProfile in the state variables */
+            setIsCreatingProfile(false);
+
             /* Display error message */
-            alert(error.message);
+            const message = error.message as string;
+            handleModal("error", message);
         }
     };
 

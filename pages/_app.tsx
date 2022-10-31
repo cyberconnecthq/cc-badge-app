@@ -3,16 +3,18 @@ import type { AppProps } from "next/app";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "../apollo";
 import { AuthContextProvider } from "../context/auth";
+import { ModalContextProvider } from "../context/modal";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={apolloClient}>
       <AuthContextProvider>
-        <Component {...pageProps} />
+        <ModalContextProvider>
+          <Component {...pageProps} />
+        </ModalContextProvider>
       </AuthContextProvider>
     </ApolloProvider>
   );
 }
 
 export default MyApp;
-

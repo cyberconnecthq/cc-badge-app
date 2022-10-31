@@ -2,13 +2,15 @@ import { useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { pinJSONToIPFS, getEssenceSVGData } from "../../helpers/functions";
 import { CREATE_REGISTER_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
-import { IEssenceMetadata } from "../../types";
+import { IBadgeInput, IEssenceMetadata } from "../../types";
+import { randCompanyName } from "@ngneat/falso";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 import { v4 as uuidv4 } from "uuid";
-import { IoMdRibbon } from "react-icons/io";
 
-function BadgeBtn() {
-    const { provider, address, accessToken, profileID, handle, checkNetwork } = useContext(AuthContext);
+function BadgeBtn({ nftImageURL, title, venue, date }: IBadgeInput) {
+    const { provider, address, accessToken, primayProfileID, primaryHandle, setIsCreatingBadge, checkNetwork } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
     const [createRegisterEssenceTypedData] = useMutation(CREATE_REGISTER_ESSENCE_TYPED_DATA);
     const [relay] = useMutation(RELAY);
 
@@ -16,16 +18,16 @@ function BadgeBtn() {
         try {
             /* Check if the user connected with wallet */
             if (!(provider && address)) {
-                throw Error("Connect with MetaMask.");
+                throw Error("You need to Connect wallet.");
             }
 
-            /* Check if the has signed in */
-            if (!accessToken) {
-                throw Error("Youn need to Sign in.");
+            /* Check if the user logged in */
+            if (!(accessToken)) {
+                throw Error("You need to Sign in.");
             }
 
             /* Check if the has signed up */
-            if (!profileID) {
+            if (!primayProfileID) {
                 throw Error("Youn need to Sign up.");
             }
 
@@ -35,11 +37,6 @@ function BadgeBtn() {
             /* Function to render the svg data for the NFT */
             /* (default if the user doesn't pass a image url) */
             const svg_data = getEssenceSVGData();
-
-            /* Collect user input for NFT image */
-            const nftImageURL = prompt("NFT image URL:");
-            const title = prompt("Event name:") || "Twitter Space AMA";
-            const venue = prompt("Venue:") || "twitter";
 
             /* Construct the metadata object for the Essence NFT */
             const metadata: IEssenceMetadata = {
@@ -53,20 +50,20 @@ function BadgeBtn() {
                 tags: [],
                 image: nftImageURL ? nftImageURL : "",
                 image_data: !nftImageURL ? svg_data : "",
-                name: `@${handle}'s event`,
-                description: `@${handle}'s event on CyberConnect Event app`,
+                name: `@${primaryHandle}'s event`,
+                description: `@${primaryHandle}'s event on CyberConnect Event app`,
                 animation_url: "",
                 external_url: "",
                 attributes: [
                     {
                         display_type: "string",
                         trait_type: "title",
-                        value: title,
+                        value: title || `${randCompanyName()} event`,
                     },
                     {
                         display_type: "date",
                         trait_type: "date",
-                        value: Date.now(),
+                        value: date,
                     },
                     {
                         display_type: "string",
@@ -97,7 +94,7 @@ function BadgeBtn() {
                             chainID: chainID
                         },
                         /* The profile id under which the Essence is registered */
-                        profileID: profileID,
+                        profileID: primayProfileID,
                         /* Name of the Essence */
                         name: "Event SBT",
                         /* Symbol of the Essence */
@@ -136,15 +133,25 @@ function BadgeBtn() {
             });
             const txHash = relayResult.data?.relay?.relayTransaction?.txHash;
 
+            /* Close Post Modal */
+            handleModal(null, "");
+
+            /* Set the isCreatingBadge in the state variables */
+            setIsCreatingBadge(true);
+
             /* Log the transaction hash */
             console.log("~~ Tx hash ~~");
             console.log(txHash);
 
             /* Display success message */
-            alert("Successfully created the badge!");
+            handleModal("success", "Post was created!");
         } catch (error) {
+            /* Set the isCreatingBadge in the state variables */
+            setIsCreatingBadge(false);
+
             /* Display error message */
-            alert(error.message);
+            const message = error.message as string;
+            handleModal("error", message);
         }
     };
 
@@ -154,7 +161,7 @@ function BadgeBtn() {
             type="submit"
             onClick={handleOnClick}
         >
-            <IoMdRibbon />
+            Badge
         </button>
     );
 }

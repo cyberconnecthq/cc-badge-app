@@ -4,14 +4,33 @@ export interface IAuthContext {
     provider: Web3Provider | undefined;
     address: string | undefined;
     accessToken: string | undefined;
-    profileID: number | undefined;
-    handle: string | undefined;
+    primayProfileID: number | undefined;
+    primaryHandle: string | undefined;
+    profileCount: number;
+    badgeCount: number;
+    badges: any[];
+    profiles: any[];
+    isCreatingProfile: boolean;
+    isCreatingBadge: boolean;
     setProvider: (provider: Web3Provider | undefined) => void;
     setAddress: (address: string | undefined) => void;
     setAccessToken: (accessToken: string | undefined) => void;
-    setProfileID: (profileID: number | undefined) => void;
-    setHandle: (handle: string | undefined) => void;
+    setPrimayProfileID: (primayProfileID: number | undefined) => void;
+    setPrimaryHandle: (primaryHandle: string | undefined) => void;
+    setProfileCount: (profileCount: number) => void;
+    setBadgeCount: (badgeCount: number) => void;
+    setBadges: (badges: any[]) => void;
+    setProfiles: (profiles: any[]) => void;
+    setIsCreatingProfile: (isCreatingProfile: boolean) => void;
+    setIsCreatingBadge: (isCreatingBadge: boolean) => void;
     checkNetwork: (provider: Web3Provider) => Promise<void>;
+}
+
+export interface IModalContext {
+    modal: boolean;
+    modalType: string | null;
+    modalText: string;
+    handleModal: (type: string | null, text: string) => void;
 }
 
 /* Metadata schema for Profile NFT */
@@ -96,10 +115,33 @@ export interface IEssenceMetadata {
     external_url?: string;
 }
 
-export interface IBadgeCard {
-    essenceID: number;
-    profileID: number;
-    tokenURI: string;
+export interface IAccountCard {
     handle: string;
+    avatar: string;
+    metadata: string;
+    profileID: number;
+    isPrimary: boolean;
+}
+
+export interface IBadgeCard {
+    createdBy: {
+        metadata: string;
+        profileID: number;
+    };
+    essenceID: number;
+    tokenURI: string;
+}
+
+export interface ISignupInput {
     name: string;
+    bio: string;
+    handle: string;
+    avatar: string;
+}
+
+export interface IBadgeInput {
+    nftImageURL: string;
+    title: string;
+    venue: string;
+    date: string;
 }

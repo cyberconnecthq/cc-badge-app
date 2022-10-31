@@ -1,45 +1,38 @@
+import { useContext } from "react";
 import type { NextPage } from "next";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
+import { AuthContext } from "../context/auth";
 import { BadgeCard } from "../components/Cards/BadgeCard";
 import { IBadgeCard } from "../types";
+import BadgePlaceholder from "../components/Placeholders/BadgePlaceholder";
 
 const Home: NextPage = () => {
-  const badges = [
+  const { address, accessToken, primayProfileID, isCreatingBadge, badges } = useContext(AuthContext);
+  const featuredBadges = [
     {
-      handle: "ccprotocol",
-      name: "CyberConnect",
-      profileID: 15,
       essenceID: 4,
-      tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmS4vgKoaHvYyUpNNYso1mMf5hweBHfkM2pDDWy4SsDTc1"
+      tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmS4vgKoaHvYyUpNNYso1mMf5hweBHfkM2pDDWy4SsDTc1",
+      createdBy: {
+        profileID: 15,
+        metadata: "QmRiyArHF4abhXo4pdKVQj3fVg6jLvcnH4DitVijuTaoyq"
+      }
     },
     {
-      handle: "snowdot",
-      name: "Snowdot",
-      profileID: 44,
       essenceID: 13,
-      tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmQiiAsGHZaCRvLcYy7CjuP1aX3Qee8FMh5YHxG1HXwSDY"
+      tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmQiiAsGHZaCRvLcYy7CjuP1aX3Qee8FMh5YHxG1HXwSDY",
+      createdBy: {
+        profileID: 44,
+        metadata: "QmUoU9be1DGKUiVwEjvbw9dMRrRNK4TX7A57YL4NBe4hQa"
+      }
     },
     {
-      handle: "samer",
-      name: "Samer",
-      profileID: 2,
-      essenceID: 11,
-      tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmbRbn9BVfLc978pgkAW1CxhVTwiB3xux8T1MnNMZh1pap"
-    },
-    {
-      handle: "snowdot",
-      name: "Snowdot",
-      profileID: 44,
-      essenceID: 14,
-      tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmPKHdpKH1qLx1xcvE6fn53xHDbkyjsUBfAe85Y7PTqsnk"
-    },
-    {
-      handle: "snowdot",
-      name: "Snowdot",
-      profileID: 44,
       essenceID: 15,
-      tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmedVZGUJtQwQ17h3VF2TqnuWr66sENcUccQGDgYucyWQW"
+      tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmedVZGUJtQwQ17h3VF2TqnuWr66sENcUccQGDgYucyWQW",
+      createdBy: {
+        profileID: 44,
+        metadata: "QmUoU9be1DGKUiVwEjvbw9dMRrRNK4TX7A57YL4NBe4hQa"
+      }
     },
   ];
 
@@ -51,19 +44,49 @@ const Home: NextPage = () => {
           <h1>Badges</h1>
           <hr></hr>
           <div className="badges">
-            {
-              badges.length > 0 &&
-              badges.map((post: IBadgeCard, index: number) => (
-                <BadgeCard
-                  key={index}
-                  essenceID={post.essenceID}
-                  profileID={post.profileID}
-                  tokenURI={post.tokenURI}
-                  handle={post.handle}
-                  name={post.name}
-                />
-              ))
-            }
+            <h2>Featured</h2>
+            <br></br>
+            <div className="featured-badges">
+              {
+                featuredBadges.length > 0 &&
+                featuredBadges.map((badge: IBadgeCard, index: number) => (
+                  <BadgeCard
+                    key={index}
+                    essenceID={badge.essenceID}
+                    tokenURI={badge.tokenURI}
+                    createdBy={badge.createdBy}
+                  />
+                ))
+              }
+            </div>
+            <br></br>
+            <br></br>
+            <h2>My badges</h2>
+            <br></br>
+            <div>
+              {
+                !(accessToken && address && primayProfileID)
+                  ? <div>You need to <strong>Sign in</strong> and <strong>Sign up</strong> to view your badges.</div>
+                  : (<div className="my-badges">
+                    {
+                      badges.length === 0
+                        ? <div>You do not have any badges yet.</div>
+                        : badges.map((badge, index) => (
+                          <BadgeCard
+                            key={index}
+                            essenceID={badge.essenceID}
+                            tokenURI={badge.tokenURI}
+                            createdBy={badge.createdBy}
+                          />
+                        ))
+                    }
+                    {
+                      isCreatingBadge &&
+                      <BadgePlaceholder />
+                    }
+                  </div>)
+              }
+            </div>
           </div>
         </div>
         <div className="wrapper-details">
