@@ -6,8 +6,9 @@ import { parseURL } from "../../helpers/functions";
 import { BsCalendar2Event } from "react-icons/bs";
 import { GoLocation } from "react-icons/go";
 import { BsFillMicFill } from "react-icons/bs";
+import Loader from "../Loader";
 
-export const BadgeCard = ({ essenceID, tokenURI, createdBy }: IBadgeCard) => {
+export const BadgeCard = ({ essenceID, tokenURI, createdBy, isCollectedByMe, isIndexed }: IBadgeCard) => {
     const { profileID, metadata } = createdBy;
     const [name, setName] = useState("");
     const [data, setData] = useState({
@@ -15,6 +16,7 @@ export const BadgeCard = ({ essenceID, tokenURI, createdBy }: IBadgeCard) => {
         image_data: "",
         attributes: []
     });
+    const [src, setSrc] = useState(data.image ? data.image : data.image_data);
 
     useEffect(() => {
         if (!tokenURI) return;
@@ -58,7 +60,15 @@ export const BadgeCard = ({ essenceID, tokenURI, createdBy }: IBadgeCard) => {
                 data?.attributes.length > 0 &&
                 <div className="badge-card">
                     <div className="badge-card-img center">
-                        {data.image_data && <Image src={data.image_data} alt="badge" width={400} height={400} />}
+                        <Image
+                            src={src}
+                            alt="badge"
+                            width={400}
+                            height={400}
+                            onError={() => setSrc("/assets/essence-placeholder.svg")}
+                            placeholder="blur"
+                            blurDataURL="/assets/essence-placeholder.svg"
+                        />
                     </div>
                     <div>
                         <div className="badge-card-title">{data.attributes[0]["value"]}</div>
@@ -75,10 +85,17 @@ export const BadgeCard = ({ essenceID, tokenURI, createdBy }: IBadgeCard) => {
                             <div>{data.attributes[1]["value"] && new Date(Number(data.attributes[1]["value"])).toLocaleDateString()}</div>
                         </div>
                     </div>
-                    <CollectBtn
-                        profileID={profileID}
-                        essenceID={essenceID}
-                    />
+                    <div className="badge-collect">
+                        {
+                            isIndexed
+                                ? <CollectBtn
+                                    profileID={profileID}
+                                    essenceID={essenceID}
+                                    isCollectedByMe={isCollectedByMe}
+                                />
+                                : <Loader />
+                        }
+                    </div>
                 </div>
             }
         </>

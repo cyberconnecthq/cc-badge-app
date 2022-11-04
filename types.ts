@@ -4,26 +4,27 @@ export interface IAuthContext {
     provider: Web3Provider | undefined;
     address: string | undefined;
     accessToken: string | undefined;
-    primayProfileID: number | undefined;
-    primaryHandle: string | undefined;
+    primaryProfile: IPrimaryProfileCard | undefined;
     profileCount: number;
     badgeCount: number;
-    badges: any[];
-    profiles: any[];
-    isCreatingProfile: boolean;
-    isCreatingBadge: boolean;
+    badges: IBadgeCard[];
+    profiles: IAccountCard[];
+    indexingProfiles: IAccountCard[];
+    indexingBadges: IBadgeCard[];
     setProvider: (provider: Web3Provider | undefined) => void;
     setAddress: (address: string | undefined) => void;
     setAccessToken: (accessToken: string | undefined) => void;
-    setPrimayProfileID: (primayProfileID: number | undefined) => void;
-    setPrimaryHandle: (primaryHandle: string | undefined) => void;
+    setPrimaryProfile: (
+        primaryProfile: IPrimaryProfileCard | undefined
+    ) => void;
     setProfileCount: (profileCount: number) => void;
     setBadgeCount: (badgeCount: number) => void;
-    setBadges: (badges: any[]) => void;
-    setProfiles: (profiles: any[]) => void;
-    setIsCreatingProfile: (isCreatingProfile: boolean) => void;
-    setIsCreatingBadge: (isCreatingBadge: boolean) => void;
+    setBadges: (badges: IBadgeCard[]) => void;
+    setProfiles: (profiles: IAccountCard[]) => void;
+    setIndexingProfiles: (indexingProfiles: IAccountCard[]) => void;
+    setIndexingBadges: (indexingBadges: IBadgeCard[]) => void;
     checkNetwork: (provider: Web3Provider) => Promise<void>;
+    connectWallet: () => Promise<Web3Provider>;
 }
 
 export interface IModalContext {
@@ -116,11 +117,12 @@ export interface IEssenceMetadata {
 }
 
 export interface IAccountCard {
+    profileID: number;
     handle: string;
     avatar: string;
     metadata: string;
-    profileID: number;
-    isPrimary: boolean;
+    isPrimary?: boolean;
+    isIndexed?: boolean;
 }
 
 export interface IBadgeCard {
@@ -130,6 +132,8 @@ export interface IBadgeCard {
     };
     essenceID: number;
     tokenURI: string;
+    isCollectedByMe: boolean;
+    isIndexed?: boolean;
 }
 
 export interface ISignupInput {
@@ -137,6 +141,7 @@ export interface ISignupInput {
     bio: string;
     handle: string;
     avatar: string;
+    operator: string;
 }
 
 export interface IBadgeInput {
@@ -144,4 +149,11 @@ export interface IBadgeInput {
     title: string;
     venue: string;
     date: number;
+}
+
+export interface IPrimaryProfileCard {
+    profileID: number;
+    handle: string;
+    avatar: string;
+    metadata: string;
 }

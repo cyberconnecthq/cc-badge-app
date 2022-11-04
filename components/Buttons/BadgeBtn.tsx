@@ -9,27 +9,32 @@ import { ModalContext } from "../../context/modal";
 import { v4 as uuidv4 } from "uuid";
 
 function BadgeBtn({ nftImageURL, title, venue, date }: IBadgeInput) {
-    const { provider, address, accessToken, primayProfileID, primaryHandle, setIsCreatingBadge, checkNetwork } = useContext(AuthContext);
+    const {
+        accessToken,
+        indexingBadges,
+        primaryProfile,
+        setIndexingBadges,
+        checkNetwork,
+        connectWallet
+    } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [createRegisterEssenceTypedData] = useMutation(CREATE_REGISTER_ESSENCE_TYPED_DATA);
     const [relay] = useMutation(RELAY);
 
     const handleOnClick = async () => {
         try {
-            /* Check if the user connected with wallet */
-            if (!(provider && address)) {
-                throw Error("You need to Connect wallet.");
-            }
-
             /* Check if the user logged in */
             if (!(accessToken)) {
                 throw Error("You need to Sign in.");
             }
 
             /* Check if the has signed up */
-            if (!primayProfileID) {
+            if (!primaryProfile?.profileID) {
                 throw Error("Youn need to Sign up.");
             }
+
+            /* Connect wallet and get provider */
+            const provider = await connectWallet();
 
             /* Check if the network is the correct one */
             await checkNetwork(provider);
@@ -50,8 +55,8 @@ function BadgeBtn({ nftImageURL, title, venue, date }: IBadgeInput) {
                 tags: [],
                 image: nftImageURL ? nftImageURL : "",
                 image_data: !nftImageURL ? svg_data : "",
-                name: `@${primaryHandle}'s event`,
-                description: `@${primaryHandle}'s event on CyberConnect Event app`,
+                name: `@${primaryProfile.handle}'s event`,
+                description: `@${primaryProfile.handle}'s event on CyberConnect Event app`,
                 animation_url: "",
                 external_url: "",
                 attributes: [
@@ -94,7 +99,7 @@ function BadgeBtn({ nftImageURL, title, venue, date }: IBadgeInput) {
                             chainID: chainID
                         },
                         /* The profile id under which the Essence is registered */
-                        profileID: primayProfileID,
+                        profileID: primaryProfile.profileID,
                         /* Name of the Essence */
                         name: "Event SBT",
                         /* Symbol of the Essence */
@@ -136,8 +141,17 @@ function BadgeBtn({ nftImageURL, title, venue, date }: IBadgeInput) {
             /* Close Badge Modal */
             handleModal(null, "");
 
-            /* Set the isCreatingBadge in the state variables */
-            setIsCreatingBadge(true);
+            /* Set the indexingBadges in the state variables */
+            setIndexingBadges([...indexingBadges, {
+                createdBy: {
+                    metadata: primaryProfile?.metadata,
+                    profileID: primaryProfile?.profileID,
+                },
+                essenceID: 0, // Value will be updated once it's indexed
+                tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/${ipfsHash}`,
+                isIndexed: false,
+                isCollectedByMe: false,
+            }]);
 
             /* Log the transaction hash */
             console.log("~~ Tx hash ~~");
@@ -146,8 +160,8 @@ function BadgeBtn({ nftImageURL, title, venue, date }: IBadgeInput) {
             /* Display success message */
             handleModal("success", "Badge was created!");
         } catch (error) {
-            /* Set the isCreatingBadge in the state variables */
-            setIsCreatingBadge(false);
+            /* Set the indexingBadges in the state variables */
+            setIndexingBadges([...indexingBadges]);
 
             /* Display error message */
             const message = error.message as string;

@@ -2,25 +2,30 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 import SigninBtn from "../../components/Buttons/SigninBtn";
-import ConnectBtn from "../../components/Buttons/ConnectBtn";
+import PrimaryProfileCard from "../Cards/PrimaryProfileCard";
 
 const Panel = () => {
-    const { provider, address, accessToken } = useContext(AuthContext);
+    const { accessToken, primaryProfile } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
 
     return (
         <div className="panel">
-            {
-                (provider && address) ?
-                    <div>
-                        {!accessToken && <SigninBtn />}
+            <div>
+                {
+                    primaryProfile &&
+                    <PrimaryProfileCard {...primaryProfile} />
+                }
+                <div>
+                    {!accessToken && <SigninBtn />}
+                    {
+                        !primaryProfile?.profileID &&
                         <button
                             className="signup-btn"
                             onClick={() => handleModal("signup", "")}
                         >Sign up</button>
-                    </div>
-                    : <ConnectBtn />
-            }
+                    }
+                </div>
+            </div>
         </div>
     );
 };

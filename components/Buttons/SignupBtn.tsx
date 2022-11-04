@@ -8,25 +8,33 @@ import { IProfileMetadata, ISignupInput } from "../../types";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
-function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
-    const { provider, address, primayProfileID, setPrimayProfileID, primaryHandle, setPrimaryHandle, setIsCreatingProfile, checkNetwork } = useContext(AuthContext);
+function SignupBtn({ handle, avatar, name, bio, operator }: ISignupInput) {
+    const {
+        indexingProfiles,
+        setIndexingProfiles,
+        connectWallet,
+        checkNetwork
+    } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
 
     const handleOnClick = async () => {
         try {
-            /* Check if the user connected with wallet */
-            if (!(provider && address)) {
-                throw Error("You need to Connect wallet.");
-            }
+            /* Connect wallet and get provider */
+            const provider = await connectWallet();
 
             /* Check if the network is the correct one */
             await checkNetwork(provider);
 
+            const profileName = name || randFullName();
+            const profileHandle = handle || randUserName();
+            const profileAvatar = avatar || randAvatar();
+            const profileBio = bio || randPhrase();
+
             /* Construct metadata schema */
             const metadata: IProfileMetadata = {
-                name: name || randFullName(),
-                bio: bio || randPhrase(),
-                handle: handle || randUserName(),
+                name: profileName,
+                bio: profileBio,
+                handle: profileHandle,
                 version: "1.0.0",
             };
 
@@ -35,6 +43,9 @@ function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
 
             /* Get the signer from the provider */
             const signer = provider.getSigner();
+
+            /* Get the address from the provider */
+            const address = await signer.getAddress();
 
             /* Get the contract instance */
             const contract = new ethers.Contract(
@@ -51,7 +62,7 @@ function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
                     handle: handle || randUserName(),
                     avatar: avatar || randAvatar({ size: 200 }),
                     metadata: ipfsHash,
-                    operator: PROFILE_NFT_OPERATOR,
+                    operator: operator || PROFILE_NFT_OPERATOR,
                 },
                 /* preData */
                 0x0,
@@ -62,30 +73,30 @@ function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
             /* Close Signup Modal */
             handleModal(null, "");
 
-            /* Set the isCreatingProfile in the state variables */
-            setIsCreatingProfile(true);
+            /* Call the getProfileIdByHandle function to get the profile id */
+            const profileID = await contract.getProfileIdByHandle(handle);
 
-            /* Wait for the transaction to be mined */
+            /* Set the indexingProfiles in the state variables */
+            setIndexingProfiles([...indexingProfiles, {
+                profileID: Number(profileID),
+                handle: profileHandle,
+                avatar: profileAvatar,
+                metadata: ipfsHash,
+                isIndexed: false,
+            }]);
+
+            /* Wait for the transaction to be executed */
             await tx.wait();
 
             /* Log the transaction hash */
             console.log("~~ Tx hash ~~");
             console.log(tx.hash);
 
-            /* Call the getProfileIdByHandle function to get the profile id */
-            const newProfileID = await contract.getProfileIdByHandle(handle);
-
-            /* Set the primary profileID in the state variables */
-            setPrimayProfileID(primayProfileID || Number(newProfileID));
-
-            /* Set the primary handle in the state variables */
-            setPrimaryHandle(primaryHandle || handle);
-
             /* Display success message */
             handleModal("success", "Profile was created!");
         } catch (error) {
-            /* Set the isCreatingProfile in the state variables */
-            setIsCreatingProfile(false);
+            /* Set the indexingProfiles in the state variables */
+            setIndexingProfiles([...indexingProfiles]);
 
             /* Display error message */
             const message = error.message as string;

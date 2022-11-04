@@ -1,40 +1,40 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import type { NextPage } from "next";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
 import { AuthContext } from "../context/auth";
 import { BadgeCard } from "../components/Cards/BadgeCard";
 import { IBadgeCard } from "../types";
-import BadgePlaceholder from "../components/Placeholders/BadgePlaceholder";
+import { useLazyQuery } from "@apollo/client";
+import { ESSENCES_BY_FILTER } from "../graphql";
+import { FEATURED_BADGES } from "../helpers/constants";
 
 const Home: NextPage = () => {
-  const { address, accessToken, primayProfileID, isCreatingBadge, badges } = useContext(AuthContext);
-  const featuredBadges = [
-    {
-      essenceID: 4,
-      tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmS4vgKoaHvYyUpNNYso1mMf5hweBHfkM2pDDWy4SsDTc1",
-      createdBy: {
-        profileID: 15,
-        metadata: "QmRiyArHF4abhXo4pdKVQj3fVg6jLvcnH4DitVijuTaoyq"
-      }
-    },
-    {
-      essenceID: 13,
-      tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmQiiAsGHZaCRvLcYy7CjuP1aX3Qee8FMh5YHxG1HXwSDY",
-      createdBy: {
-        profileID: 44,
-        metadata: "QmUoU9be1DGKUiVwEjvbw9dMRrRNK4TX7A57YL4NBe4hQa"
-      }
-    },
-    {
-      essenceID: 15,
-      tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmedVZGUJtQwQ17h3VF2TqnuWr66sENcUccQGDgYucyWQW",
-      createdBy: {
-        profileID: 44,
-        metadata: "QmUoU9be1DGKUiVwEjvbw9dMRrRNK4TX7A57YL4NBe4hQa"
-      }
-    },
-  ];
+  const {
+    accessToken,
+    indexingBadges,
+    badges
+  } = useContext(AuthContext);
+  const [getEssencesByFilter] = useLazyQuery(ESSENCES_BY_FILTER);
+  const [featuredBadges, setFeaturedBadges] = useState<IBadgeCard[]>([]);
+
+  useEffect(() => {
+    const getEssences = async () => {
+      const { data } = await getEssencesByFilter({
+        variables: {
+          appID: "cyberconnect"
+        },
+      });
+      setFeaturedBadges([...data?.essenceByFilter]);
+    };
+
+    if (accessToken) {
+      getEssences();
+    } else {
+      setFeaturedBadges(FEATURED_BADGES);
+    }
+  }, [accessToken]);
+
 
   return (
     <div className="container">
@@ -49,12 +49,11 @@ const Home: NextPage = () => {
             <div className="featured-badges">
               {
                 featuredBadges.length > 0 &&
-                featuredBadges.map((badge: IBadgeCard, index: number) => (
+                featuredBadges.map(badge => (
                   <BadgeCard
-                    key={index}
-                    essenceID={badge.essenceID}
-                    tokenURI={badge.tokenURI}
-                    createdBy={badge.createdBy}
+                    key={`${badge.createdBy.profileID}-${badge.essenceID}`}
+                    {...badge}
+                    isIndexed={true}
                   />
                 ))
               }
@@ -63,30 +62,55 @@ const Home: NextPage = () => {
             <br></br>
             <h2>My badges</h2>
             <br></br>
-            <div>
-              {
-                !(accessToken && address && primayProfileID)
-                  ? <div>You need to <strong>Sign in</strong> and <strong>Sign up</strong> to view your badges.</div>
-                  : (<div className="my-badges">
+            {
+              !accessToken
+                ? <div>You need to <strong>Sign in</strong> to view your badges.</div>
+                : (
+                  <div className="my-badges">
                     {
-                      badges.length === 0
-                        ? <div>You do not have any badges yet.</div>
-                        : badges.map((badge, index) => (
-                          <BadgeCard
-                            key={index}
-                            essenceID={badge.essenceID}
-                            tokenURI={badge.tokenURI}
-                            createdBy={badge.createdBy}
-                          />
-                        ))
+                      badges.length === 0 &&
+                      (
+                        indexingBadges.length > 0
+                          ? (<div>
+                            {
+                              indexingBadges.length > 0 &&
+                              indexingBadges.map(badge => (
+                                <BadgeCard
+                                  key={`${badge.createdBy.profileID}-${badge.essenceID}`}
+                                  {...badge}
+                                />
+                              ))
+                            }
+                          </div>)
+                          : <div>You haven&apos;t created any badges yet.</div>
+                      )
                     }
                     {
-                      isCreatingBadge &&
-                      <BadgePlaceholder />
+                      badges.length > 0 &&
+                      <div className="my-badges">
+                        {
+                          badges.map(badge => (
+                            <BadgeCard
+                              key={`${badge.createdBy.profileID}-${badge.essenceID}`}
+                              {...badge}
+                              isIndexed={true}
+                            />
+                          ))
+                        }
+                        {
+                          indexingBadges.length > 0 &&
+                          indexingBadges.map(badge => (
+                            <BadgeCard
+                              key={`${badge.createdBy.profileID}-${badge.essenceID}`}
+                              {...badge}
+                            />
+                          ))
+                        }
+                      </div>
                     }
-                  </div>)
-              }
-            </div>
+                  </div>
+                )
+            }
           </div>
         </div>
         <div className="wrapper-details">

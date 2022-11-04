@@ -1,16 +1,16 @@
 import { useContext } from "react";
 import type { NextPage } from "next";
 import { AuthContext } from "../context/auth";
-import { ModalContext } from "../context/modal";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
 import AccountCard from "../components/Cards/AccountCard";
-import AccountPlaceholder from "../components/Placeholders/AccountPlaceholder";
-import { IAccountCard } from "../types";
 
 const SettingsPage: NextPage = () => {
-    const { address, accessToken, primayProfileID, isCreatingProfile, profiles } = useContext(AuthContext);
-    const { handleModal } = useContext(ModalContext);
+    const {
+        accessToken,
+        indexingProfiles,
+        profiles
+    } = useContext(AuthContext);
 
     return (
         <div className="container">
@@ -19,32 +19,58 @@ const SettingsPage: NextPage = () => {
                 <div className="wrapper-content">
                     <h1>Settings</h1>
                     <hr></hr>
+                    <h2>Account</h2>
+                    <br></br>
                     {
-                        !(accessToken && address && primayProfileID)
-                            ? <div>You need to <strong>Sign in</strong> and <strong>Sign up</strong> to view details about your account.</div>
-                            : (<div>
-                                <h2>Account</h2>
-                                <p>The list of all accounts associated to the wallet address.</p>
-                                <div className="accounts">
-                                    {
-                                        profiles.length > 0 &&
-                                        profiles.map((account: IAccountCard, index: number) => (
-                                            <AccountCard
-                                                key={index}
-                                                profileID={account.profileID}
-                                                handle={account.handle}
-                                                avatar={account.avatar}
-                                                metadata={account.metadata}
-                                                isPrimary={account.isPrimary}
-                                            />
-                                        ))
-                                    }
-                                    {
-                                        isCreatingProfile &&
-                                        <AccountPlaceholder />
-                                    }
+                        !accessToken
+                            ? <div>You need to <strong>Sign in</strong> to view details about your account.</div>
+                            : (
+                                <div>
+                                    <div className="accounts">
+                                        {
+                                            profiles.length === 0 &&
+                                            (
+                                                indexingProfiles.length > 0
+                                                    ? (<div>
+                                                        {
+
+                                                            indexingProfiles.map(account => (
+                                                                <AccountCard
+                                                                    key={`${account.handle}-${account.profileID}`}
+                                                                    {...account}
+                                                                />
+                                                            ))
+                                                        }
+                                                    </div>)
+                                                    : <div>You do not have a profile yet. <strong>Sign up</strong> to create one.</div>
+                                            )
+                                        }
+                                        {
+                                            profiles.length > 0 &&
+                                            <>
+                                                <div>The list of all accounts associated to the connected wallet.</div>
+                                                <br></br>
+                                                {
+                                                    profiles.map(account => (
+                                                        <AccountCard
+                                                            key={`${account.handle}-${account.profileID}`}
+                                                            {...account}
+                                                            isIndexed={true}
+                                                        />
+                                                    )
+                                                    )
+                                                }
+                                                {
+                                                    indexingProfiles.length > 0 &&
+                                                    indexingProfiles.map(account => (
+                                                        <AccountCard key={`${account.handle}-${account.profileID}`} {...account} />
+                                                    ))
+                                                }
+                                            </>
+                                        }
+                                    </div>
                                 </div>
-                            </div>)
+                            )
                     }
                 </div>
                 <div className="wrapper-details">
