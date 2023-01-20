@@ -1,18 +1,19 @@
 import axios from "axios";
 
-const apiKey = process.env.NEXT_PUBLIC_API_KEY || "";
-const apiSecret = process.env.NEXT_PUBLIC_API_SECRET || "";
+const apiKey = process.env.PINATA_API_KEY || "";
+const apiSecret = process.env.PINATA_API_SECRET || "";
 
 export const pinJSONToIPFS = async (json: { [key: string]: any }) => {
     const data = JSON.stringify(json);
     const url = "https://api.pinata.cloud/pinning/pinJSONToIPFS";
-
+    console.log(`Api key ${apiKey}, secret ${apiSecret}`)
     return axios
         .post(url, data, {
             headers: {
                 "Content-Type": "application/json",
-                pinata_api_key: apiKey,
-                pinata_secret_api_key: apiSecret,
+                // "Authorization": `Bearer ${apiKey}`,
+                "pinata_api_key": apiKey.toString(),
+                "pinata_secret_api_key": apiSecret.toString(),
             },
         })
         .then((response) => response.data.IpfsHash)

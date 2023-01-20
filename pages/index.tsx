@@ -13,16 +13,19 @@ const Home: NextPage = () => {
   const {
     accessToken,
     indexingBadges,
-    badges
+    badges,
+    address
   } = useContext(AuthContext);
   const [getEssencesByFilter] = useLazyQuery(ESSENCES_BY_FILTER);
   const [featuredBadges, setFeaturedBadges] = useState<IBadgeCard[]>([]);
 
   useEffect(() => {
     const getEssences = async () => {
+      console.log(`address: ${address}`)
       const { data } = await getEssencesByFilter({
         variables: {
-          appID: "cyberconnect"
+          appID: "cyberconnect",
+          address: address
         },
       });
       setFeaturedBadges([...data?.essenceByFilter]);

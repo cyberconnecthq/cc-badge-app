@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const ESSENCES_BY_FILTER = gql`
-    query essencesByFilter($appID: String) {
+   query essencesByFilter($appID: String, $address: AddressEVM!) {
         essenceByFilter(appID: $appID) {
             essenceID
             tokenURI
@@ -11,7 +11,7 @@ export const ESSENCES_BY_FILTER = gql`
                 profileID
                 metadata
             }
-            isCollectedByMe
+            isCollectedByMe(me:$address)
         }
     }
 `;

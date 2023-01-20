@@ -94,6 +94,8 @@ function SignupBtn({ handle, avatar, name, bio, operator }: ISignupInput) {
 
             /* Display success message */
             handleModal("success", "Profile was created!");
+            handleModal("Check your profile", "https://testnets.opensea.io/assets/goerli/0x57e12b7a5f38a7f9c23ebd0400e6e53f2a45f271/" + profileID)
+
         } catch (error) {
             /* Set the indexingProfiles in the state variables */
             setIndexingProfiles([...indexingProfiles]);
