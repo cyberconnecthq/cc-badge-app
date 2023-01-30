@@ -43,7 +43,7 @@ const BadgeForm = () => {
                 <label>Event date</label>
                 <input
                     name="date"
-                    value={badgeInput.date}
+                    value={new Date(badgeInput.date).toISOString().split("T")[0]}
                     onChange={handleOnChange}
                     type="date"
                 ></input>
