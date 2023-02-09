@@ -94,7 +94,7 @@ function BadgeBtn({ nftImageURL, title, venue, date }: IBadgeInput) {
 					profileId: primaryProfile?.profileID,
 					name: "gas-post",
 					symbol: "gp",
-					essenceTokenURI: ipfsHash,
+					essenceTokenURI: `https://cyberconnect.mypinata.cloud/ipfs/${ipfsHash}`,
 					essenceMw: "0x0000000000000000000000000000000000000000",
 					transferable: true,
 					deployAtRegister: true,
