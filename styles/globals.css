@@ -1,12 +1,13 @@
 :root {
   --black: rgba(17, 17, 17, 1);
-  --white: #FFFEFC;
+  --white: #fffefc;
   --gray: rgba(17, 17, 17, 0.1);
   --dark-gray: #00000099;
-  --orange: #EB5757;
+  --orange: #eb5757;
   --green: #65c819;
   --red: #c8192a;
-  --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 html {
@@ -250,7 +251,8 @@ svg {
 }
 
 .badge-card-img {
-  box-shadow: rgb(88 102 126 / 8%) 0px 4px 24px, rgb(88 102 126 / 12%) 0px 1px 2px;
+  box-shadow: rgb(88 102 126 / 8%) 0px 4px 24px,
+    rgb(88 102 126 / 12%) 0px 1px 2px;
   border-radius: 50%;
   overflow: hidden;
   margin: 20px;
@@ -258,7 +260,6 @@ svg {
 
 .badge-card .collect-btn {
   font-size: 14px;
-  width: 80px;
   padding: 8px 10px;
 }
 
@@ -291,6 +292,10 @@ svg {
   right: 20px;
 }
 
+.badge-collect-btn-group {
+  display: flex;
+  flex-direction: column;
+}
 .badges {
   margin-bottom: 60px;
 }

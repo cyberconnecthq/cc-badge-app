@@ -112,5 +112,27 @@
     ],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          { "internalType": "address", "name": "collector", "type": "address" },
+          { "internalType": "uint256", "name": "profileId", "type": "uint256" },
+          { "internalType": "uint256", "name": "essenceId", "type": "uint256" }
+        ],
+        "internalType": "struct DataTypes.CollectParams",
+        "name": "params",
+        "type": "tuple"
+      },
+      { "internalType": "bytes", "name": "preData", "type": "bytes" },
+      { "internalType": "bytes", "name": "postData", "type": "bytes" }
+    ],
+    "name": "collect",
+    "outputs": [
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ]

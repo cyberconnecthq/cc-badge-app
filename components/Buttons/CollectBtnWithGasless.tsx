@@ -4,7 +4,7 @@ import { CREATE_COLLECT_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
-function CollectBtn({
+function CollectBtnWithGasless({
 	profileID,
 	essenceID,
 	isCollectedByMe,
@@ -98,9 +98,9 @@ function CollectBtn({
 			onClick={handleOnClick}
 			disabled={stateCollect}
 		>
-			{stateCollect ? "Collected" : "Collect"}
+			{stateCollect ? "Collected" : "Gasless Collect"}
 		</button>
 	);
 }
 
-export default CollectBtn;
+export default CollectBtnWithGasless;
